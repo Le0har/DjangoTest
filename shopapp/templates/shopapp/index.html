@@ -1,0 +1,17 @@
+{% extends 'shopapp/base.html' %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% block body %}
+    New shop
+    <ul>
+        {% for name, price in products %}
+            <li>Товар - {{ name }}  по цене {{ price }} руб</li>
+            {% if name|length == 7 %}
+                <span>Long name</span>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endblock %}
