@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>
+        {% block title %}
+            Base title
+        {% endblock %}
+    </title>
+</head>
+<body>
+    {% block body %}
+        Base body
+    {% endblock %}
+
+    <div>
+        <br>
+        Http User-Agent: {{ request.user_agent }}
+    </div>
+    
+</body>
+</html>

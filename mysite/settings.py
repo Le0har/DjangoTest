@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'shopapp',
+    'request_app',
 ]
 
 MIDDLEWARE = [
@@ -48,6 +49,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'request_app.middlewares.set_useragent_middleware',
+    'request_app.middlewares.CountRequestMiddleware',
+    'request_app.middlewares.throttling_middleware',
 ]
 
 ROOT_URLCONF = 'mysite.urls'
