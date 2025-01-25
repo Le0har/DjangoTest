@@ -10,7 +10,7 @@
         <ul>
             {% for product in products %}
                 <li>
-                    <p>Название: {{ product.name }}</p>
+                    <p><a href="{% url 'shopapp:product-details' pk=product.pk %}">Название: {{ product.name }}</a></p>
                     <p>Цена: {{ product.price }}</p>
                     <p>Скидка: {{ product.discount }}</p>
                 </li>

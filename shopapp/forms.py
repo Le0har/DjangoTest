@@ -1,6 +1,7 @@
 from django import forms
 from django.core import validators
 from .models import Product, Order
+from django.contrib.auth.models import Group
 
 
 # class ProductForm(forms.Form):
@@ -31,3 +32,9 @@ class OrderForm(forms.ModelForm):
         widgets = {
             'products': forms.CheckboxSelectMultiple(attrs={'class': 'form-control'}) 
         }
+
+
+class GroupForm(forms.ModelForm):
+    class Meta:
+        model = Group
+        fields = ['name']

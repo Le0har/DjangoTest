@@ -1,9 +1,28 @@
-from django.http import HttpResponse, HttpRequest
-from django.shortcuts import render, redirect, reverse
+from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from timeit import default_timer
 from django.contrib.auth.models import Group
 from shopapp.models import Product, Order
-from .forms import ProductForm, OrderForm
+from .forms import ProductForm, OrderForm, GroupForm
+from django.views import View
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+
+
+class ShopIndexView(View):
+
+    def get(self, request):
+        products = [
+        ('Планшет', 100),
+        ('Колонка', 500),
+        ('Телефон', 300),
+        ]
+
+        context = {
+            'time_running': default_timer(),
+            'products': products,
+        }
+        return render(request, 'shopapp/index.html', context=context)
 
 
 def shop_index(request):
@@ -19,11 +38,29 @@ def shop_index(request):
     }
     return render(request, 'shopapp/index.html', context=context)
 
+
 def group_list(request):
     context = {
         'groups': Group.objects.prefetch_related('permissions').all(),
     }
     return render(request, 'shopapp/group-list.html', context=context)
+
+
+class GroupsListView(View):
+
+    def get(self, request):
+        context = {
+            'form': GroupForm(),
+            'groups': Group.objects.prefetch_related('permissions').all(),
+        }
+        return render(request, 'shopapp/group-list.html', context=context)
+    
+    def post(self, request):
+        form = GroupForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect(request.path)
+
 
 def create_product(request):
     if request.method == 'POST':
@@ -46,11 +83,69 @@ def create_product(request):
     }
     return render(request, 'shopapp/create_product.html', context=context)
 
+
+class ProductCreateView(CreateView):
+    model = Product
+    fields = ['name', 'price', 'description', 'discount']
+    # form_class = ProductForm
+    success_url = reverse_lazy('shopapp:products-list')
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    fields = ['name', 'price', 'description', 'discount']
+    template_name_suffix = '_update'
+
+    def get_success_url(self):
+        return reverse('shopapp:product-details', kwargs={'pk': self.object.pk})
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    success_url = reverse_lazy('shopapp:products-list')
+
+    def form_valid(self, form):
+        success_url = self.get_success_url()
+        self.object.archived = True
+        self.object.save()
+        return HttpResponseRedirect(success_url)
+
+
 def products_list(request):
     context = {
         'products': Product.objects.all(),
     }
     return render(request, 'shopapp/products-list.html', context=context)
+
+
+class ProductListView(ListView):
+    template_name = 'shopapp/products-list.html'
+    # model = Product
+    queryset = Product.objects.filter(archived=False)
+    context_object_name = 'products'
+    
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['products'] = Product.objects.all()
+    #     return context
+
+
+# class ProductDetailView(View):
+
+#     def get(self, request, pk):
+#         # product = Product.objects.get(pk=pk)
+#         product = get_object_or_404(Product, pk=pk)
+#         context = {
+#             'product': product
+#         }
+#         return render(request, 'shopapp/products-details.html', context=context)
+
+
+class ProductDetailView(DetailView):
+    template_name = 'shopapp/products-details.html'
+    model = Product
+    context_object_name = 'product'
+
 
 def create_order(request):
     if request.method == 'POST':
@@ -71,3 +166,12 @@ def orders_list(request):
         'orders': Order.objects.all(),
     }
     return render(request, 'shopapp/orders-list.html', context=context)
+
+
+class OrderListView(ListView):
+    # model = Order
+    queryset = Order.objects.all()
+
+
+class OrderDetailView(DetailView):
+    queryset = Order.objects.all()

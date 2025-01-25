@@ -5,7 +5,15 @@
 {% endblock %}
 
 {% block body %}
-    <h3>Группы:</h3>
+    <h1>Группы:</h1>
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Создать</button>
+        </form>
+    </div>
+
     <div>
         {% if not groups %}
             Групп нет
@@ -15,7 +23,7 @@
                     <li>
                         {{ group }}
                         <ul>
-                            {% for permission in group.permissions .all %}
+                            {% for permission in group.permissions.all %}
                                 <li>
                                     {{ permission.name }}
                                 </li>
