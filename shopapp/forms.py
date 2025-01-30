@@ -30,7 +30,7 @@ class OrderForm(forms.ModelForm):
         fields = ['adress', 'promo', 'user', 'products']
         labels = {'adress': 'Адрес', 'promo': 'Промо-код', 'user': 'Клиент', 'products': 'Товары'}
         widgets = {
-            'products': forms.CheckboxSelectMultiple(attrs={'class': 'form-control'}) 
+            'products': forms.CheckboxSelectMultiple() 
         }
 
 

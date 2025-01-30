@@ -23,26 +23,26 @@ class CountRequestMiddleware:
 
     def __call__(self, request):
         self.requests_count += 1
-        print('Количество запросов =', self.requests_count)
+        # print('Количество запросов =', self.requests_count)
         response = self.get_response(request)
         self.response_count += 1
-        print('Количество ответов =', self.response_count)
+        # print('Количество ответов =', self.response_count)
         return response
     
     def process_exception(self, request, exeption):
         self.exeptions_cont += 1
-        print('Получили', self.exeptions_cont, 'ошибок')
+        # print('Получили', self.exeptions_cont, 'ошибок')
 
 
 def throttling_middleware(get_response):
     print('запуск middleware частота запросов')
 
     def middleware(request):
-        print('до запроса частоты')
+        # print('до запроса частоты')
         user_ip = request.META.get('REMOTE_ADDR')
         response = get_response(request)
-        print('IP:', user_ip)
-        print('после запроса частоты')
+        # print('IP:', user_ip)
+        # print('после запроса частоты')
         return response
     
     return middleware
