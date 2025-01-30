@@ -21,6 +21,14 @@
     </div>
     <div>
         <br>
+        <a href="{% url 'shopapp:order-update' pk=order.pk %}">Изменить заказ</a>
+    </div>
+    <div>
+        <br>
+        <a href="{% url 'shopapp:order-delete' pk=order.pk %}">Удалить заказ</a>
+    </div>
+    <div>
+        <br>
         <a href="{% url 'shopapp:orders-list' %}">Обратно к заказам</a>
     </div>
 

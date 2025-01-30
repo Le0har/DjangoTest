@@ -25,25 +25,25 @@ class ShopIndexView(View):
         return render(request, 'shopapp/index.html', context=context)
 
 
-def shop_index(request):
-    products = [
-        ('Планшет', 100),
-        ('Колонка', 500),
-        ('Телефон', 300),
-    ]
+# def shop_index(request):
+#     products = [
+#         ('Планшет', 100),
+#         ('Колонка', 500),
+#         ('Телефон', 300),
+#     ]
 
-    context = {
-        'time_running': default_timer(),
-        'products': products,
-    }
-    return render(request, 'shopapp/index.html', context=context)
+#     context = {
+#         'time_running': default_timer(),
+#         'products': products,
+#     }
+#     return render(request, 'shopapp/index.html', context=context)
 
 
-def group_list(request):
-    context = {
-        'groups': Group.objects.prefetch_related('permissions').all(),
-    }
-    return render(request, 'shopapp/group-list.html', context=context)
+# def group_list(request):
+#     context = {
+#         'groups': Group.objects.prefetch_related('permissions').all(),
+#     }
+#     return render(request, 'shopapp/group-list.html', context=context)
 
 
 class GroupsListView(View):
@@ -62,26 +62,26 @@ class GroupsListView(View):
         return redirect(request.path)
 
 
-def create_product(request):
-    if request.method == 'POST':
-        form = ProductForm(request.POST)
-        if form.is_valid():
-            # name = form.cleaned_data['name']
-            # price = form.cleaned_data['price']
-            # Product.objects.create(
-            #     name=name,
-            #     price=price
-            # )
-            # Product.objects.create(**form.cleaned_data)
-            form.save()
-            url = reverse('shopapp:products-list')
-            return redirect(url)
-    else:
-        form = ProductForm()
-    context = {
-        'form': form
-    }
-    return render(request, 'shopapp/create_product.html', context=context)
+# def create_product(request):
+#     if request.method == 'POST':
+#         form = ProductForm(request.POST)
+#         if form.is_valid():
+#             # name = form.cleaned_data['name']
+#             # price = form.cleaned_data['price']
+#             # Product.objects.create(
+#             #     name=name,
+#             #     price=price
+#             # )
+#             # Product.objects.create(**form.cleaned_data)
+#             form.save()
+#             url = reverse('shopapp:products-list')
+#             return redirect(url)
+#     else:
+#         form = ProductForm()
+#     context = {
+#         'form': form
+#     }
+#     return render(request, 'shopapp/create_product.html', context=context)
 
 
 class ProductCreateView(CreateView):
@@ -111,11 +111,11 @@ class ProductDeleteView(DeleteView):
         return HttpResponseRedirect(success_url)
 
 
-def products_list(request):
-    context = {
-        'products': Product.objects.all(),
-    }
-    return render(request, 'shopapp/products-list.html', context=context)
+# def products_list(request):
+#     context = {
+#         'products': Product.objects.all(),
+#     }
+#     return render(request, 'shopapp/products-list.html', context=context)
 
 
 class ProductListView(ListView):
@@ -147,25 +147,25 @@ class ProductDetailView(DetailView):
     context_object_name = 'product'
 
 
-def create_order(request):
-    if request.method == 'POST':
-        form = OrderForm(request.POST)
-        if form.is_valid():
-            form.save()
-            url = reverse('shopapp:orders-list')
-            return redirect(url)
-    else:
-        form = OrderForm()
-    context = {
-        'form': form
-    }
-    return render(request, 'shopapp/create_order.html', context=context)
+# def create_order(request):
+#     if request.method == 'POST':
+#         form = OrderForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             url = reverse('shopapp:orders-list')
+#             return redirect(url)
+#     else:
+#         form = OrderForm()
+#     context = {
+#         'form': form
+#     }
+#     return render(request, 'shopapp/create_order.html', context=context)
 
-def orders_list(request):
-    context = {
-        'orders': Order.objects.all(),
-    }
-    return render(request, 'shopapp/orders-list.html', context=context)
+# def orders_list(request):
+#     context = {
+#         'orders': Order.objects.all(),
+#     }
+#     return render(request, 'shopapp/orders-list.html', context=context)
 
 
 class OrderListView(ListView):
@@ -175,3 +175,24 @@ class OrderListView(ListView):
 
 class OrderDetailView(DetailView):
     queryset = Order.objects.all()
+
+
+class OrderCreateView(CreateView):
+    form_class = OrderForm
+    success_url = reverse_lazy('shopapp:orders-list')
+    template_name = 'shopapp/create_order.html'
+
+
+class OrderUpdateView(UpdateView):
+    model = Order
+    form_class = OrderForm
+    template_name_suffix = '_update'
+
+    def get_success_url(self):
+        return reverse('shopapp:order-details', kwargs={'pk': self.object.pk})
+    
+
+class OrderDeleteView(DeleteView):
+    model = Order
+    template_name = 'shopapp/order_delete.html'
+    success_url = reverse_lazy('shopapp:orders-list')

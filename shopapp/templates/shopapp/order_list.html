@@ -9,7 +9,7 @@
     <ul>
         {% for order in object_list %}
             <li>
-                <p><a href="{% url 'shopapp:orders-details' pk=order.pk %}">Заказ #{{ order.id }}</a></p>
+                <p><a href="{% url 'shopapp:order-details' pk=order.pk %}">Заказ #{{ order.id }}</a></p>
                 <p>Адрес доставки: {{ order.adress }}</p>
                 <p>Промо-код: {{ order.promo }}</p>
                 <p>Дата создания: {{ order.created_at }}</p>

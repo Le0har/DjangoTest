@@ -13,6 +13,8 @@ urlpatterns = [
     path('products/<int:pk>/confirm-delete/', views.ProductDeleteView.as_view(), name='product-delete'),
     path('products/create/', views.ProductCreateView.as_view(), name='product-create'),
     path('orders/', views.OrderListView.as_view(), name='orders-list'),
-    path('orders/create/', views.create_order, name='order-create'),
-    path('orders/<int:pk>/', views.OrderDetailView.as_view(), name='orders-details'),
+    path('orders/create/', views.OrderCreateView.as_view(), name='order-create'),
+    path('orders/<int:pk>/', views.OrderDetailView.as_view(), name='order-details'),
+    path('orders/<int:pk>/update/', views.OrderUpdateView.as_view(), name='order-update'),
+    path('orders/<int:pk>/delete/', views.OrderDeleteView.as_view(), name='order-delete'),
 ]

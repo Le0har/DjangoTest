@@ -1,0 +1,22 @@
+{% extends 'shopapp/base.html'%} 
+
+{% block title %}
+    Order delete
+{% endblock %}
+
+{% block body %}
+    <h1>Удаление заказа #{{ object.id }}</h1>
+    <h2>Подтверждаете удаление?</h2>
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit">Удалить</button>
+        </form>
+    </div>
+    <div>
+        <br>
+        <a href="{% url 'shopapp:order-details' pk=object.pk %}">Обратно к заказу</a>
+    </div>
+{% endblock %}
