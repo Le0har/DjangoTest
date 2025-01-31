@@ -12,10 +12,14 @@
         <div>Скидка: {{ product.descount }}</div>
         <div>Архивировано: {{ product.archived }}</div>
     </div>
-    <div>
-        <br>
-        <a href="{% url 'shopapp:product-update' pk=product.pk %}">Изменить товар</a>
-    </div>
+
+    {% if perms.shopapp.change_product or product.author == request.user %}
+        <div>
+            <br>
+            <a href="{% url 'shopapp:product-update' pk=product.pk %}">Изменить товар</a>
+        </div>
+    {% endif %}
+
     <div>
         <br>
         <a href="{% url 'shopapp:product-delete' pk=product.pk %}">Удалить товар</a>

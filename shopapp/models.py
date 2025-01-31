@@ -16,6 +16,7 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     changed_at = models.DateTimeField(auto_now=True)
     archived = models.BooleanField(default=False)
+    author = models.ForeignKey(to=User, on_delete=models.SET_NULL, blank=True, null=True, related_name='author')
 
     def __str__(self):
         return f'Товар {self.name},  pk={self.pk}'

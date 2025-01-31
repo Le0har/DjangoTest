@@ -18,9 +18,11 @@
         </ul>
     </div>
 
-    <div>
-        <br>
-        <a href="{% url 'shopapp:product-create' %}">Создать товар</a>
-    </div>
+    {% if perms.shopapp.add_product %}
+        <div>
+            <br>
+            <a href="{% url 'shopapp:product-create' %}">Создать товар</a>
+        </div>
+    {% endif %}
 
 {% endblock %}

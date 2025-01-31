@@ -2,13 +2,13 @@ from django.http import HttpRequest
 
 
 def set_useragent_middleware(get_response):
-    print('запуск middleware')
+    # print('запуск middleware')
 
     def middleware(request):
-        print('до запроса')
+        # print('до запроса')
         request.user_agent = request.META['HTTP_USER_AGENT']
         response = get_response(request)
-        print('после запроса')
+        # print('после запроса')
         return response
     
     return middleware
@@ -35,7 +35,7 @@ class CountRequestMiddleware:
 
 
 def throttling_middleware(get_response):
-    print('запуск middleware частота запросов')
+    # print('запуск middleware частота запросов')
 
     def middleware(request):
         # print('до запроса частоты')

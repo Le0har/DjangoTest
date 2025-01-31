@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from timeit import default_timer
@@ -168,8 +169,9 @@ class ProductDetailView(DetailView):
 #     return render(request, 'shopapp/orders-list.html', context=context)
 
 
-class OrderListView(ListView):
+class OrderListView(ListView, PermissionRequiredMixin):
     # model = Order
+    permission_required = 'shopapp:view_order'
     queryset = Order.objects.all()
 
 
