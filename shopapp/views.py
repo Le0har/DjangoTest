@@ -8,7 +8,24 @@ from .forms import ProductForm, OrderForm, GroupForm
 from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from rest_framework.viewsets import ModelViewSet
+from .serializers import ProductSerializer, OrderSerializer
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
+
+class ProductViewSet(ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    filter_backends = [SearchFilter, DjangoFilterBackend, OrderingFilter]
+    search_fields = ['name', 'description']
+    ordering_fields = ['name', 'discount', 'price']
+    filterset_fields = ['name', 'description', 'price', 'discount', 'archived', 'author']
+
+
+class OrderViewSet(ModelViewSet):    
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
 
 class ShopIndexView(View):
 
