@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_filters',
+    'django.contrib.admindocs',
+    'drf_spectacular',
     'shopapp',
     'request_app',
     'test_auth',
@@ -58,6 +60,7 @@ MIDDLEWARE = [
     'request_app.middlewares.set_useragent_middleware',
     'request_app.middlewares.CountRequestMiddleware',
     'request_app.middlewares.throttling_middleware',
+    'django.contrib.admindocs.middleware.XViewMiddleware',
 ]
 
 ROOT_URLCONF = 'mysite.urls'
@@ -142,4 +145,12 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
     ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'My site with API',
+    'DESCRIPTION': 'My API',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
 }

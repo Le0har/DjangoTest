@@ -1,3 +1,7 @@
+"""
+В этом файле представления для интернет-магазина: товары, заказы.
+"""
+
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from django.shortcuts import render, redirect, reverse, get_object_or_404
@@ -12,9 +16,19 @@ from rest_framework.viewsets import ModelViewSet
 from .serializers import ProductSerializer, OrderSerializer
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import extend_schema, OpenApiResponse
 
 
+@extend_schema(
+    description='CRUD представление',
+    tags=['Товары'],
+    )
 class ProductViewSet(ModelViewSet):
+    """
+    Набор представлений для модели Product
+    Полный CRUD для сущности товара
+    """
+
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [SearchFilter, DjangoFilterBackend, OrderingFilter]
@@ -22,6 +36,17 @@ class ProductViewSet(ModelViewSet):
     ordering_fields = ['name', 'discount', 'price']
     filterset_fields = ['name', 'description', 'price', 'discount', 'archived', 'author']
 
+    @extend_schema(
+        summary='Получение продукта по ID',
+        description='Более подробное описание...',
+        responses={
+            200: ProductSerializer,
+            404: OpenApiResponse(description='Товар не найден, пустой запрос'),
+        }
+    )
+    def retrieve(self, *args, **kwargs):
+        return super().retrieve(*args, **kwargs)
+    
 
 class OrderViewSet(ModelViewSet):    
     queryset = Order.objects.all()

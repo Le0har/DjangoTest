@@ -3,6 +3,11 @@ from django.contrib.auth.models import User
 
 
 class Product(models.Model):
+    """
+    Модель для представления Товара, который можно продавать в интернет-магазине
+    Заказы: :model:'shopapp.Order'
+    """
+    
     class Meta:
         ordering = ['name', 'price']
         # db_table = 'new_products'
